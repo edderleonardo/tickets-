@@ -34,7 +34,9 @@ SECRET_KEY = 'django-insecure-e*2zb#i%q*8n1=*nx$$q-mu0=f0eounlbwqac2_r8lstzcv4)o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*",
+]
 
 
 # Application definition
@@ -47,7 +49,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = ['django_extensions', 'rest_framework', 'rest_framework_simplejwt', 'drf_spectacular']
+THIRD_PARTY_APPS = ['django_extensions', 'rest_framework', 'rest_framework_simplejwt', 'drf_spectacular', 'corsheaders', 'django_filters', ]
 
 LOCAL_APPS = [
     'tickets.apps.core',
@@ -63,6 +65,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -148,3 +151,9 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'PERMISSIONS': ['rest_framework.permissions.AllowAny'],
 }
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]

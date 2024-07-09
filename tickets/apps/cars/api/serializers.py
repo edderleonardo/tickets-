@@ -6,13 +6,26 @@ from tickets.apps.civils.api.serializers import CivilSerializer
 
 
 class CarSerializer(serializers.ModelSerializer):
-    owner = serializers.PrimaryKeyRelatedField(queryset=Civil.objects.all(), write_only=True)
+    owner = serializers.PrimaryKeyRelatedField(queryset=Civil.objects.all())
 
     class Meta:
         model = Car
-        fields = ['patent_plate', 'brand', 'color', 'owner']
+        fields = ['id', 'patent_plate', 'brand', 'color', 'owner']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['owner'] = CivilSerializer(instance.owner).data
-        return representation
+class CarDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Car
+        fields = ['id', 'patent_plate', 'brand', 'color']
+
+    
+class OwnerCarsSerializer(serializers.ModelSerializer):
+    cars = CarDetailSerializer(many=True, read_only=True)
+    owner = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Civil
+        fields = ['owner', 'cars']
+
+    def get_owner(self, obj):
+        return {'fullname': obj.fullname}

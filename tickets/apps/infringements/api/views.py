@@ -6,12 +6,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
-
+from django_filters.rest_framework import DjangoFilterBackend
 from tickets.apps.civils.models import Civil
 from tickets.apps.infringements.models import Infringement
 from tickets.apps.infringements.api.serializers import InformerSerializer
 from tickets.apps.infringements.api.serializers import InfringementSerializer
 from tickets.apps.infringements.api.serializers import SearchInfringementSerializer
+from tickets.apps.infringements.api.serializers import CarInfringementsSerializer
+from tickets.apps.cars.models import Car
 
 
 @extend_schema(tags=['Infracciones'])
@@ -24,12 +26,18 @@ from tickets.apps.infringements.api.serializers import SearchInfringementSeriali
         summary='Generar reporte',
         description='Generar reporte de infracciones de una persona, se tiene que pasar como argumento el correo electrónico',
     ),
+    by_car=extend_schema(
+        summary='Listar infracciones por vehículo',
+        description='Devuelve una lista de infracciones pertenecientes a un vehículo específico.',
+    ),
 )
 class InfringementView(viewsets.ModelViewSet):
     queryset = Infringement.objects.all()
     serializer_class = InfringementSerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post', 'delete']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['car']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -56,3 +64,17 @@ class InfringementView(viewsets.ModelViewSet):
             return Response({'error': 'Persona no encontrada'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+    @action(detail=False, methods=['get'], url_path='by-car/(?P<car_id>\d+)')
+    def by_car(self, request, car_id=None):
+        try:
+            car = Car.objects.get(pk=car_id)
+        except Car.DoesNotExist:
+            return Response({"detail": "Vehículo no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        
+        infringements = Infringement.objects.filter(car=car)
+        serializer = CarInfringementsSerializer({
+            'car': car,
+            'infringements': infringements
+        })
+        return Response(serializer.data)
