@@ -33,3 +33,16 @@ services:
       - .envs/.local/.postgres
     ports:
       - "6543:5432"
+
+  frontend:
+    image: node:latest
+    container_name: tickets_local_frontend
+    command: >
+      sh -c "cd /app && npm install && npm run dev"
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - django
