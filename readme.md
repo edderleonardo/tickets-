@@ -4,7 +4,7 @@
 Este proyecto es una aplicación web que permite crear y visualizar infracciones de tránsito.
 
 ## Requerimientos
-Para su comodidad usar docker y docker-compose para la instalación de los requerimientos.
+Para su comodidad usar docker y docker-compose para la instalación de los requerimientos. Esto hará toda la magia.
 - docker
 - docker-compose
 
@@ -36,7 +36,7 @@ El oficial logeado puede crear personas usando el botón "Agregar nueva persona"
 El oficial logeado puede crear vehículos usando el link "Ver autos" si el usuario cuenta con autos podrá verlos en el listado. Si no existe autos podrá crear uno usando el botón "Agregar auto" que pedirá los datos en un modal una vez agregado podrá verlo en el listado de manera inmediata. Una vez creado el auto podrá editarlo usando un modal ó eliminarlo.
 
 #### Infracciones
-Una vez creado un automovil, el oficial podrá crear infracciones usando el link "Infracciones" si el usuario cuenta con infracciones podrá verlas en el listado. Si no existe infracciones podrá crear una usando el botón "Agregar infracción" que pedirá los datos en un modal una vez agregada podrá verla en el listado de manera inmediata. Las infracciones no se pueden editar ni eliminar.
+Una vez creado un automóvil, el oficial podrá crear infracciones usando el link "Infracciones" si el usuario cuenta con infracciones podrá verlas en el listado. Si no existe infracciones podrá crear una usando el botón "Agregar infracción" que pedirá los datos en un modal una vez agregada podrá verla en el listado de manera inmediata. Las infracciones no se pueden editar ni eliminar.
 
 ### Buscar infracciones por email 
 El oficial podrá buscar infracciones desde el dashboard usando el campo de búsqueda, si el email existe en la base de datos se mostrarán las infracciones asociadas a ese email.
